@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Digital - Comida Rápida</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+	
+    <style>
+		@import url('https://fonts.googleapis.com/css2?family=Fascinate+Inline&display=swap');
+		.fascinate-inline-regular {
+		  font-family: "Fascinate Inline", system-ui;
+		  font-weight: 400;
+		  font-style: normal;
+		}
+		
+        .hero-image {
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .promo-transition {
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .action-icons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 50px;
+        }
+        .logo-container {
+            margin-top: -50px;
+            z-index: 10;
+            position: relative;
+        }
+        .logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid white;
+            object-fit: cover;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .splide__slide {
+            padding: 0 0.5rem;
+        }
+        .promo-caption {
+            transition: opacity 0.5s ease;
+        }
+        .promo-caption.hidden {
+            display: none;
+        }
+        .splide__arrow {
+            background: white;
+            opacity: 1;
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+        .splide__arrow svg {
+            fill: #333;
+        }
+        .splide__pagination {
+            bottom: -1.5rem;
+        }
+        .splide__pagination__page.is-active {
+            background: #ef4444;
+        }
+        .menu-category .grid > div {
+            opacity: 1 !important;
+            transform: none !important;
+        }
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        .modal-open .modal-content {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Hero Image with Action Icons -->
+    <div class="hero-image" style="background-image: url('https://i.imgur.com/RaRonvM.png');">
+        <div class="action-icons">
+            <button onclick="openShareModal()" class="text-gray-700 hover:text-red-500 transition">
+                <i data-feather="share-2"></i>
+            </button>
+            <button onclick="openLocationModal()" class="text-gray-700 hover:text-red-500 transition">
+                <i data-feather="map-pin"></i>
+            </button>
+            <button onclick="openHoursModal()" class="text-gray-700 hover:text-red-500 transition">
+                <i data-feather="clock"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Logo and Restaurant Name -->
+    <div class="logo-container flex justify-center">
+        <img src="https://i.imgur.com/3JK1fJK.png" alt="Restaurant Logo" class="logo">
+    </div>
+    <div class="text-center mt-4">
+        <h1 class="text-4xl font-bold text-gray-800 fascinate-inline-regular">BURGUER EXPRESS</h1>
+        <p class="text-gray-600">Comida rápida de calidad</p>
+    </div>
+
+    <!-- Promotions Carousel -->
+    <div class="container mx-auto px-4 mt-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Promociones</h2>
+        <div class="relative overflow-hidden rounded-lg">
+            <div class="relative h-64 md:h-96">
+                <!-- Promo 1 -->
+                <div class="absolute inset-0 promo-transition opacity-100" id="promo1">
+                    <img src="https://i.imgur.com/MhO5aDQ.png" alt="2x1 en Hamburguesas" class="w-full h-full object-cover">
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-white">
+                        <h3 class="text-xl font-bold">2x1 en Hamburguesas</h3>
+                        <p class="text-gray-300">Todos los martes y jueves de 2pm a 6pm</p>
+                    </div>
+                </div>
+                <!-- Promo 2 -->
+                <div class="absolute inset-0 promo-transition opacity-0" id="promo2">
+                    <img src="https://i.imgur.com/SNW6c5a.jpeg" alt="Combo Familiar" class="w-full h-full object-cover">
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-white">
+                        <h3 class="text-xl font-bold">Combo Familiar</h3>
+                        <p class="text-gray-300">4 hamburguesas + 4 bebidas + papas grandes</p>
+                    </div>
+                </div>
+                <!-- Promo 3 -->
+                <div class="absolute inset-0 promo-transition opacity-0" id="promo3">
+                    <img src="https://i.imgur.com/cBVEePk.jpeg" alt="Descuento Estudiantil" class="w-full h-full object-cover">
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-white">
+                        <h3 class="text-xl font-bold">Descuento Estudiantil</h3>
+                        <p class="text-gray-300">20% de descuento presentando carnet</p>
+                    </div>
+                </div>
+                <!-- Promo 4 -->
+                <div class="absolute inset-0 promo-transition opacity-0" id="promo4">
+                    <img src="http://static.photos/food/1200x630/4" alt="Combo Desayuno" class="w-full h-full object-cover">
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-white">
+                        <h3 class="text-xl font-bold">Combo Desayuno</h3>
+                        <p class="text-gray-300">Sandwich + café + jugo natural</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Navigation Arrows -->
+            <div class="absolute inset-0 flex items-center justify-between px-4">
+                <button onclick="prevPromo()" class="bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-md transition-all duration-300 transform hover:scale-110">
+                    <i data-feather="chevron-left"></i>
+                </button>
+                <button onclick="nextPromo()" class="bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-md transition-all duration-300 transform hover:scale-110">
+                    <i data-feather="chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Categories -->
+    <div class="container mx-auto px-4 mt-12">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">Nuestro Menú</h2>
+
+        <!-- Hamburgers -->
+        <div class="menu-category mb-12" id="hamburgers" data-aos="fade-up" data-aos-duration="800">
+            <h3 class="text-xl font-bold text-gray-800 border-b-2 border-red-500 pb-2 mb-4">Hamburguesas</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Item 1 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden flex">
+                    <div class="w-1/3">
+                        <img src="https://i.imgur.com/VieYhYx.jpeg" alt="Hamburguesa Clásica" class="w-full h-full object-cover">
+                    </div>
+                    <div class="w-2/3 p-4">
+                        <h4 class="font-bold text-lg">Clásica</h4>
+                        <p class="text-gray-600 text-sm mt-1">Carne 100% res, lechuga, tomate, cebolla y salsa especial</p>
+                        <p class="text-red-600 font-bold mt-2">$3.99</p>
+                    </div>
+                </div>
+                <!-- Item 2 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden flex">
+                    <div class="w-1/3">
+                        <img src="https://i.imgur.com/alnna3z.png" alt="Hamburguesa BBQ" class="w-full h-full object-cover">
+                    </div>
+                    <div class="w-2/3 p-4">
+                        <h4 class="font-bold text-lg">BBQ</h4>
+                        <p class="text-gray-600 text-sm mt-1">Carne, queso cheddar, tocino, cebolla caramelizada y salsa BBQ</p>
+                        <p class="text-red-600 font-bold mt-2">$4.99</p>
+                    </div>
+                </div>
+                <!-- Item 3 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden flex">
+                    <div class="w-1/3">
+                        <img src="https://i.imgur.com/VCtc3k7.png" alt="Hamburguesa Doble" class="w-full h-full object-cover">
+                    </div>
+                    <div class="w-2/3 p-4">
+                        <h4 class="font-bold text-lg">Doble Carne</h4>
+                        <p class="text-gray-600 text-sm mt-1">Doble carne, doble queso, lechuga, tomate y salsa especial</p>
+                        <p class="text-red-600 font-bold mt-2">$5.99</p>
+                    </div>
+                </div>
+                <!-- Item 4 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden flex">
+                    <div class="w-1/3">
+                        <img src="https://i.imgur.com/95rulLX.jpeg" alt="Choriperro" class="w-full h-full object-cover">
+                    </div>
+                    <div class="w-2/3 p-4">
+                        <h4 class="font-bold text-lg">Choriperro</h4>
+                        <p class="text-gray-600 text-sm mt-1">Perro con chorizo, queso cheddar, tocineta  y todas las salsas</p>
+                        <p class="text-red-600 font-bold mt-2">$2.99</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sides -->
+        <div class="menu-category mb-12" id="sides" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
+            <h3 class="text-xl font-bold text-gray-800 border-b-2 border-red-500 pb-2 mb-4">Acompañamientos</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Item 1 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden flex">
+                    <div class="w-1/3">
+                        <img src="https://i.imgur.com/KpavD76.jpeg" alt="Papas Fritas" class="w-full h-full object-cover">
+                    </div>
+                    <div class="w-2/3 p-4">
+                        <h4 class="font-bold text-lg">Papas Fritas</h4>
+                        <p class="text-gray-600 text-sm mt-1">Crujientes papas fritas con sal marina</p>
+                        <p class="text-red-600 font-bold mt-2">$3.99</p>
+                    </div>
+                </div>
+                <!-- Item 2 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden flex">
+                    <div class="w-1/3">
+                        <img src="https://i.imgur.com/uZbXHPn.jpeg" alt="Aros de Cebolla" class="w-full h-full object-cover">
+                    </div>
+                    <div class="w-2/3 p-4">
+                        <h4 class="font-bold text-lg">Aros de Cebolla</h4>
+                        <p class="text-gray-600 text-sm mt-1">Crujientes aros de cebolla con salsa BBQ</p>
+                        <p class="text-red-600 font-bold mt-2">$4.99</p>
+                    </div>
+                </div>
+                <!-- Item 3 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden flex">
+                    <div class="w-1/3">
+                        <img src="https://i.imgur.com/QAnF63D.jpeg" alt="Nuggets de Pollo" class="w-full h-full object-cover">
+                    </div>
+                    <div class="w-2/3 p-4">
+                        <h4 class="font-bold text-lg">Pollo a la Broster</h4>
+                        <p class="text-gray-600 text-sm mt-1">3 piezas de pollo tipo crispy, papas y ensalada</p>
+                        <p class="text-red-600 font-bold mt-2">$5.99</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Drinks -->
+        <div class="menu-category mb-12" id="drinks" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+            <h3 class="text-xl font-bold text-gray-800 border-b-2 border-red-500 pb-2 mb-4">Bebidas</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Item 1 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden flex">
+                    <div class="w-1/3">
+                        <img src="https://i.imgur.com/A7Q5lZq.jpeg" alt="Refrescos" class="w-full h-full object-cover">
+                    </div>
+                    <div class="w-2/3 p-4">
+                        <h4 class="font-bold text-lg">Refrescos</h4>
+                        <p class="text-gray-600 text-sm mt-1">Coca-Cola, Sprite, Fanta, etc. (500ml)</p>
+                        <p class="text-red-600 font-bold mt-2">$1.00</p>
+                    </div>
+                </div>
+                <!-- Item 2 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden flex">
+                    <div class="w-1/3">
+                        <img src="https://i.imgur.com/BHWSNP3.jpeg" alt="Agua Mineral" class="w-full h-full object-cover">
+                    </div>
+                    <div class="w-2/3 p-4">
+                        <h4 class="font-bold text-lg">Agua Mineral</h4>
+                        <p class="text-gray-600 text-sm mt-1">Agua mineral con o sin gas (500ml)</p>
+                        <p class="text-red-600 font-bold mt-2">$1.00</p>
+                    </div>
+                </div>
+                <!-- Item 3 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden flex">
+                    <div class="w-1/3">
+                        <img src="https://i.imgur.com/0JaVfQh.png" alt="Jugos Naturales" class="w-full h-full object-cover">
+                    </div>
+                    <div class="w-2/3 p-4">
+                        <h4 class="font-bold text-lg">Jugos Naturales</h4>
+                        <p class="text-gray-600 text-sm mt-1">Naranja, Durazno, Manzana (350ml)</p>
+                        <p class="text-red-600 font-bold mt-2">$1.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Hours Modal -->
+    <div id="hoursModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 max-w-sm w-full modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Horario de Atención</h3>
+                <button onclick="closeModal('hoursModal')" class="text-gray-500 hover:text-gray-700">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div class="space-y-2">
+                <div class="flex justify-between">
+                    <span>Lunes a Viernes:</span>
+                    <span class="font-medium">11:00 AM - 10:00 PM</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Sábados:</span>
+                    <span class="font-medium">11:00 AM - 11:00 PM</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Domingos:</span>
+                    <span class="font-medium">12:00 PM - 9:00 PM</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Location Modal -->
+    <div id="locationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 max-w-sm w-full modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Ubicación</h3>
+                <button onclick="closeModal('locationModal')" class="text-gray-500 hover:text-gray-700">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <p class="mb-4">Av. Principal 1234, Local 5<br>Ciudad de Caracas, Venezuela</p>
+            <a href="https://maps.google.com" target="_blank" class="bg-red-600 text-white py-2 px-4 rounded-lg flex items-center justify-center hover:bg-red-700 transition">
+                <i data-feather="map" class="mr-2"></i> Abrir en Maps
+            </a>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div id="shareModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 max-w-sm w-full modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Compartir</h3>
+                <button onclick="closeModal('shareModal')" class="text-gray-500 hover:text-gray-700">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div class="flex justify-center space-x-4">
+                <a href="#" class="bg-blue-500 text-white p-3 rounded-full hover:bg-blue-600 transition">
+                    <i data-feather="facebook"></i>
+                </a>
+                <a href="#" class="bg-blue-400 text-white p-3 rounded-full hover:bg-blue-500 transition">
+                    <i data-feather="twitter"></i>
+                </a>
+                <a href="#" class="bg-red-500 text-white p-3 rounded-full hover:bg-red-600 transition">
+                    <i data-feather="instagram"></i>
+                </a>
+                <a href="#" class="bg-green-500 text-white p-3 rounded-full hover:bg-green-600 transition">
+                    <i data-feather="whatsapp"></i>
+                </a>
+            </div>
+            <div class="mt-4">
+                <p class="text-sm text-gray-600 mb-2">O copia el enlace:</p>
+                <div class="flex">
+                    <input type="text" value="https://burgerexpress.com/menu" class="border rounded-l-lg px-3 py-2 w-full" readonly>
+                    <button onclick="copyLink()" class="bg-gray-200 px-3 rounded-r-lg hover:bg-gray-300">
+                        <i data-feather="copy"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-xl font-bold fascinate-inline-regular">BURGER EXPRESS</h3>
+                    <p class="text-gray-400">La mejor comida rápida de la ciudad</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i data-feather="facebook"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i data-feather="instagram"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i data-feather="twitter"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i data-feather="youtube"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i data-feather="phone"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i data-feather="message-square"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-6 pt-6 text-center text-gray-400 text-sm">
+                <p>© 2023 Burger Express. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize AOS and feather icons
+        AOS.init();
+        feather.replace();
+        
+        // Modal functions
+        function openHoursModal() {
+            document.getElementById('hoursModal').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('hoursModal').classList.add('modal-open');
+            }, 10);
+        }
+        
+        function openLocationModal() {
+            document.getElementById('locationModal').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('locationModal').classList.add('modal-open');
+            }, 10);
+        }
+        
+        function openShareModal() {
+            document.getElementById('shareModal').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('shareModal').classList.add('modal-open');
+            }, 10);
+        }
+        
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('modal-open');
+            setTimeout(() => {
+                document.getElementById(id).classList.add('hidden');
+            }, 300);
+        }
+        
+        function copyLink() {
+            const link = document.createElement('input');
+            link.value = window.location.href;
+            document.body.appendChild(link);
+            link.select();
+            document.execCommand('copy');
+            document.body.removeChild(link);
+            alert('Enlace copiado al portapapeles');
+        }
+        
+        // Promotions Carousel
+        let currentPromo = 1;
+        let promoInterval;
+        
+        function showPromo(promoNumber) {
+            clearInterval(promoInterval);
+            
+            // Reset all promos with animation
+            for (let i = 1; i <= 4; i++) {
+                const promo = document.getElementById(`promo${i}`);
+                if (i !== promoNumber) {
+                    promo.classList.remove('opacity-100');
+                    promo.classList.add('opacity-0');
+                }
+            }
+            
+            // Show selected promo with animation
+            const selectedPromo = document.getElementById(`promo${promoNumber}`);
+            selectedPromo.classList.remove('opacity-0');
+            selectedPromo.classList.add('opacity-100');
+            
+            currentPromo = promoNumber;
+            startPromoInterval();
+        }
+
+        function nextPromo() {
+            const next = currentPromo % 4 + 1;
+            showPromo(next);
+        }
+
+        function prevPromo() {
+            const prev = currentPromo === 1 ? 4 : currentPromo - 1;
+            showPromo(prev);
+        }
+        
+        function startPromoInterval() {
+            promoInterval = setInterval(() => {
+                currentPromo = currentPromo % 4 + 1;
+                showPromo(currentPromo);
+            }, 10000); // 10 seconds
+        }
+        
+        // Initialize carousel
+        document.addEventListener('DOMContentLoaded', function() {
+            startPromoInterval();
+        });
+    </script>
+</body>
+</html>
